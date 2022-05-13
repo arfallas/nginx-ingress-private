@@ -1,5 +1,18 @@
 {
-REGISTRY_NAME=arfallas.azurecr.io
+#Asking for ACR namae
+echo 'Please Add your ACR URL below to import needed images:'
+read -p 'ACR URL: ' acrurl
+
+echo 'Now we will attach your ACR to the AKS cluster'
+
+echo 'What is the AKS cluster name?'
+read -p 'AKS name: ' aksname
+
+echo 'what is the AKS resource group name'
+read -p 'AKS resource group: ' aksrg
+az aks update -n $aksname -g $aksrg --attach-acr $acrurl
+
+REGISTRY_NAME= $acrurl
 SOURCE_REGISTRY=k8s.gcr.io
 CONTROLLER_IMAGE=ingress-nginx/controller
 CONTROLLER_TAG=v1.0.4
@@ -15,8 +28,9 @@ az acr import --name $REGISTRY_NAME --source $SOURCE_REGISTRY/$DEFAULTBACKEND_IM
 # Add the ingress-nginx repository
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 
+
 # Set variable for ACR location to use for pulling images
-ACR_URL=arfallas.azurecr.io
+ACR_URL=$acrurl
 
 # Use Helm to deploy an NGINX ingress controller
 helm install nginx-ingress ingress-nginx/ingress-nginx \
