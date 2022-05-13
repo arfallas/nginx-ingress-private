@@ -30,7 +30,7 @@ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 
 
 # Set variable for ACR location to use for pulling images
-ACR_URL=$acrurl
+ACR_URL= $acrurl
 
 # Use Helm to deploy an NGINX ingress controller
 helm install nginx-ingress ingress-nginx/ingress-nginx \
